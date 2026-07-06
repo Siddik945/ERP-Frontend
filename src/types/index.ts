@@ -1,4 +1,4 @@
-export type UserRole = 'Admin' | 'Manager' | 'Employee';
+export type UserRole = "Admin" | "Manager" | "Employee";
 
 export type User = {
   id?: string;
@@ -51,7 +51,9 @@ export type Sale = {
     lineTotal: number;
   }[];
   grandTotal: number;
+  createdBy?: User;
   createdAt: string;
+  updatedAt?: string;
 };
 
 export type DashboardStats = {

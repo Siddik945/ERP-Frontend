@@ -1,24 +1,25 @@
-import { useQuery } from '@tanstack/react-query';
-import { api, getErrorMessage, imageUrl } from '../lib/api';
-import { ApiResponse, DashboardStats } from '../types';
+import { useQuery } from "@tanstack/react-query";
+import { api, getErrorMessage, imageUrl } from "../lib/api";
+import { ApiResponse, DashboardStats } from "../types";
 
 export const Dashboard = () => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['dashboard'],
+    queryKey: ["dashboard"],
     queryFn: async () => {
-      const res = await api.get<ApiResponse<DashboardStats>>('/dashboard');
+      const res = await api.get<ApiResponse<DashboardStats>>("/dashboard");
       return res.data.data;
-    }
+    },
   });
 
   if (isLoading) return <div className="card">Loading dashboard...</div>;
-  if (error) return <div className="card text-red-600">{getErrorMessage(error)}</div>;
+  if (error)
+    return <div className="card text-red-600">{getErrorMessage(error)}</div>;
 
   const stats = [
-    { label: 'Total Products', value: data?.totalProducts ?? 0 },
-    { label: 'Total Customers', value: data?.totalCustomers ?? 0 },
-    { label: 'Total Sales', value: data?.totalSales ?? 0 },
-    { label: 'Low Stock Items', value: data?.lowStockProducts.length ?? 0 }
+    { label: "Total Products", value: data?.totalProducts ?? 0 },
+    { label: "Total Customers", value: data?.totalCustomers ?? 0 },
+    { label: "Total Sales", value: data?.totalSales ?? 0 },
+    { label: "Low Stock Items", value: data?.lowStockProducts.length ?? 0 },
   ];
 
   return (
@@ -31,13 +32,17 @@ export const Dashboard = () => {
         {stats.map((item) => (
           <div key={item.label} className="card">
             <p className="text-sm text-slate-500">{item.label}</p>
-            <p className="mt-2 text-3xl font-bold text-slate-900">{item.value}</p>
+            <p className="mt-2 text-3xl font-bold text-slate-900">
+              {item.value}
+            </p>
           </div>
         ))}
       </div>
 
       <section className="card">
-        <h2 className="mb-4 text-lg font-bold">Low Stock Products (Stock &lt; 5)</h2>
+        <h2 className="mb-4 text-lg font-bold">
+          Low Stock Products (Stock &lt; 5)
+        </h2>
         {!data?.lowStockProducts.length ? (
           <p className="text-sm text-slate-500">No low stock products.</p>
         ) : (
@@ -55,11 +60,18 @@ export const Dashboard = () => {
               <tbody>
                 {data.lowStockProducts.map((product) => (
                   <tr key={product._id} className="border-b last:border-0">
-                    <td className="py-2"><img src={imageUrl(product.productImage)} className="h-10 w-10 rounded object-cover" /></td>
+                    <td className="py-2">
+                      <img
+                        src={imageUrl(product.productImage)}
+                        className="h-10 w-10 rounded object-cover"
+                      />
+                    </td>
                     <td className="font-medium">{product.productName}</td>
                     <td>{product.sku}</td>
                     <td>{product.category}</td>
-                    <td className="font-semibold text-red-600">{product.stockQuantity}</td>
+                    <td className="font-semibold text-red-600">
+                      {product.stockQuantity}
+                    </td>
                   </tr>
                 ))}
               </tbody>
