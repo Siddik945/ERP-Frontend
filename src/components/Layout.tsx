@@ -6,15 +6,53 @@ import {
   Users,
   LogOut,
   History,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { PermissionKey } from "../types";
 
-const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/products", label: "Products", icon: Package },
-  { href: "/customers", label: "Customers", icon: Users },
-  { href: "/sales/create", label: "Create Sale", icon: ShoppingCart },
-  { href: "/sales/history", label: "Sale History", icon: History },
+const navItems: {
+  href: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  permission: PermissionKey;
+}[] = [
+  {
+    href: "/",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    permission: "dashboard.view",
+  },
+  {
+    href: "/products",
+    label: "Products",
+    icon: Package,
+    permission: "products.view",
+  },
+  {
+    href: "/customers",
+    label: "Customers",
+    icon: Users,
+    permission: "customers.view",
+  },
+  {
+    href: "/sales/create",
+    label: "Create Sale",
+    icon: ShoppingCart,
+    permission: "sales.create",
+  },
+  {
+    href: "/sales/history",
+    label: "Sale History",
+    icon: History,
+    permission: "sales.view",
+  },
+  {
+    href: "/roles",
+    label: "Roles & Permissions",
+    icon: ShieldCheck,
+    permission: "roles.manage",
+  },
 ];
 
 export const Layout = () => {
@@ -25,6 +63,10 @@ export const Layout = () => {
     logout();
     navigate("/login");
   };
+
+  const visibleNavItems = navItems.filter((item) =>
+    user?.permissions?.includes(item.permission),
+  );
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -50,7 +92,7 @@ export const Layout = () => {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-6 md:grid-cols-[220px_1fr]">
         <aside className="card h-fit">
           <nav className="space-y-1">
-            {navItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const Icon = item.icon;
               return (
                 <NavLink

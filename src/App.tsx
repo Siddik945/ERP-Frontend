@@ -7,6 +7,7 @@ import { ProductList } from "./pages/products/ProductList";
 import { ProductCreate } from "./pages/products/ProductCreate";
 import { ProductEdit } from "./pages/products/ProductEdit";
 import { Customers } from "./pages/customers/Customers";
+import { RolePermissionManagement } from "./pages/roles/RolePermissionManagement";
 import { CreateSale } from "./pages/sales/CreateSale";
 import { SaleHistory } from "./pages/sales/SaleHistory";
 
@@ -23,6 +24,7 @@ export const App = () => {
           <Route path="customers" element={<Customers />} />
           <Route path="sales/create" element={<CreateSale />} />
           <Route path="sales/history" element={<SaleHistory />} />
+          <Route path="roles" element={<RolePermissionManagement />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

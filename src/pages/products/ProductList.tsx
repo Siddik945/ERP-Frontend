@@ -1,27 +1,29 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api, getErrorMessage, imageUrl } from '../../lib/api';
-import { ApiResponse, Product } from '../../types';
-import { Pagination } from '../../components/Pagination';
-import { RoleGate } from '../../components/RoleGate';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { api, getErrorMessage, imageUrl } from "../../lib/api";
+import { ApiResponse, Product } from "../../types";
+import { Pagination } from "../../components/Pagination";
+import { PermissionGate } from "../../components/PermissionGate";
 
 export const ProductList = () => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['products', search, page],
+    queryKey: ["products", search, page],
     queryFn: async () => {
-      const res = await api.get<ApiResponse<Product[]>>('/products', { params: { search, page, limit: 10 } });
+      const res = await api.get<ApiResponse<Product[]>>("/products", {
+        params: { search, page, limit: 10 },
+      });
       return res.data;
-    }
+    },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => api.delete(`/products/${id}`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['products'] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
   });
 
   return (
@@ -29,11 +31,15 @@ export const ProductList = () => {
       <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
         <div>
           <h1 className="text-2xl font-bold">Products</h1>
-          <p className="text-sm text-slate-500">Search, paginate, add, edit, and delete inventory.</p>
+          <p className="text-sm text-slate-500">
+            Search, paginate, add, edit, and delete inventory.
+          </p>
         </div>
-        <RoleGate roles={['Admin', 'Manager']}>
-          <Link to="/products/create" className="btn-primary text-center">Add Product</Link>
-        </RoleGate>
+        <PermissionGate permission="products.create">
+          <Link to="/products/create" className="btn-primary text-center">
+            Add Product
+          </Link>
+        </PermissionGate>
       </div>
 
       <div className="card">
@@ -41,7 +47,10 @@ export const ProductList = () => {
           className="input"
           placeholder="Search by name, SKU, or category..."
           value={search}
-          onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
         />
       </div>
 
@@ -67,26 +76,49 @@ export const ProductList = () => {
             <tbody>
               {data?.data.map((product) => (
                 <tr key={product._id} className="border-b last:border-0">
-                  <td className="py-2"><img src={imageUrl(product.productImage)} className="h-12 w-12 rounded object-cover" /></td>
+                  <td className="py-2">
+                    <img
+                      src={imageUrl(product.productImage)}
+                      className="h-12 w-12 rounded object-cover"
+                    />
+                  </td>
                   <td className="font-medium">{product.productName}</td>
                   <td>{product.sku}</td>
                   <td>{product.category}</td>
                   <td>{product.purchasePrice}</td>
                   <td>{product.sellingPrice}</td>
-                  <td className={product.stockQuantity < 5 ? 'font-semibold text-red-600' : ''}>{product.stockQuantity}</td>
+                  <td
+                    className={
+                      product.stockQuantity < 5
+                        ? "font-semibold text-red-600"
+                        : ""
+                    }
+                  >
+                    {product.stockQuantity}
+                  </td>
                   <td>
-                    <RoleGate roles={['Admin', 'Manager']}>
-                      <div className="flex gap-2">
-                        <Link className="btn-secondary" to={`/products/${product._id}/edit`}>Edit</Link>
+                    <div className="flex gap-2">
+                      <PermissionGate permission="products.update">
+                        <Link
+                          className="btn-secondary"
+                          to={`/products/${product._id}/edit`}
+                        >
+                          Edit
+                        </Link>
+                      </PermissionGate>
+                      <PermissionGate permission="products.delete">
                         <button
                           className="btn-danger"
                           disabled={deleteMutation.isPending}
                           onClick={() => {
-                            if (confirm('Delete this product?')) deleteMutation.mutate(product._id);
+                            if (confirm("Delete this product?"))
+                              deleteMutation.mutate(product._id);
                           }}
-                        >Delete</button>
-                      </div>
-                    </RoleGate>
+                        >
+                          Delete
+                        </button>
+                      </PermissionGate>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -95,7 +127,13 @@ export const ProductList = () => {
         )}
       </div>
 
-      {data?.meta && <Pagination page={page} totalPages={data.meta.totalPages} onPageChange={setPage} />}
+      {data?.meta && (
+        <Pagination
+          page={page}
+          totalPages={data.meta.totalPages}
+          onPageChange={setPage}
+        />
+      )}
     </div>
   );
 };
