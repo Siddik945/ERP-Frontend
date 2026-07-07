@@ -7,9 +7,12 @@ import {
   LogOut,
   History,
   ShieldCheck,
+  Bell,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { PermissionKey } from "../types";
+import RealtimeSocket from "./realtime/RealtimeSocket";
+import NotificationCenter from "./realtime/NotificationCenter";
 
 const navItems: {
   href: string;
@@ -90,6 +93,8 @@ export const Layout = () => {
       </header>
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-6 md:grid-cols-[220px_1fr]">
+        <RealtimeSocket />
+        <NotificationCenter />
         <aside className="card h-fit">
           <nav className="space-y-1">
             {visibleNavItems.map((item) => {
