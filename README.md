@@ -6,6 +6,12 @@ npm install
 npm run dev
 ```
 
+## Default credentials
+
+- Admin: `admin@erp.com` / `Admin@12345`
+- Manager: `manager@erp.com` / `Manager@12345`
+- Employee: `employee@erp.com` / `Employee@12345`
+
 Open `http://localhost:5173`.
 
 ## Pages
