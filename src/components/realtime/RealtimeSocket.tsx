@@ -27,19 +27,19 @@ const RealtimeSocket = () => {
     const socket = connectSocket(token);
 
     const handleConnect = () => {
-      //   console.log("✅ Socket connected:", socket.id);
-      //   console.log("Socket transport:", socket.io.engine?.transport.name);
+      console.log("✅ Socket connected:", socket.id);
+      console.log("Socket transport:", socket.io.engine?.transport.name);
 
       dispatch(setSocketConnected(true));
     };
 
     const handleDisconnect = (reason: string) => {
-      //   console.log("❌ Socket disconnected:", reason);
+      console.log("❌ Socket disconnected:", reason);
       dispatch(setSocketConnected(false));
     };
 
     const handleConnectError = (error: Error) => {
-      //   console.error("❌ Socket connection error:", error.message);
+      console.error("❌ Socket connection error:", error.message);
 
       dispatch(setSocketConnected(false));
     };
@@ -50,7 +50,7 @@ const RealtimeSocket = () => {
       connected: boolean;
       userId: string;
     }) => {
-      //   console.log("✅ Real-time server ready for user:", userId);
+      console.log("✅ Real-time server ready for user:", userId);
     };
 
     const handleSaleCreated = (sale: SaleCreatedPayload) => {

@@ -22,3 +22,6 @@ Open `http://localhost:5173`.
 - `/products/create` Product creation with required image upload
 - `/customers` Customer management
 - `/sales/create` Create sales with customer selection, multiple products, quantity input, and automatic total
+- `/sales/history`
+- `/roles`
+- `notification`
