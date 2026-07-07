@@ -6,8 +6,8 @@ import { getErrorMessage } from "../lib/api";
 export const Login = () => {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("admin@erp.com");
-  const [password, setPassword] = useState("Admin@12345");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -48,6 +48,7 @@ export const Login = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your Email"
           />
         </div>
         <div>
@@ -57,6 +58,7 @@ export const Login = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your Password"
           />
         </div>
         <button className="btn-primary w-full" disabled={loading}>
